@@ -37,6 +37,8 @@
       <div>Loading, please wait...</div>
     </div>
 
+
+<!--static image script>
     <script>
 // a-scene
         var scene = document.querySelector("a-scene");
@@ -64,6 +66,7 @@
             scene.insertAdjacentHTML('beforeend', bola(-5));
         });
     </script>
+    -->
 
     <!-- a-frame scene -->
     <a-scene
@@ -71,9 +74,6 @@
       renderer="logarithmicDepthBuffer: true;"
       embedded
       arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;">
-      <!-- a-nft is the anchor that defines an Image Tracking entity -->
-      <!-- on 'url' use the path to the Image Descriptors created before. -->
-      <!-- the path should end with the name without the extension e.g. if file is trex.fset' the path should end with trex -->
       <a-nft
         type="nft"
         url="https://raw.githubusercontent.com/tandylew/Unicornucopia/master/frame"
@@ -81,16 +81,15 @@
         smoothCount="10"
         smoothTolerance=".01"
         smoothThreshold="5">
-          <!-- as a child of the a-nft entity, you can define the content to show. here's a GLTF model entity -->
           <a-entity
           gltf-model="https://raw.githubusercontent.com/tandylew/Unicornucopia/master/unicorn.gltf"
-              scale="10 10 10"
+              scale="100 100 100"
               position="0 0 0"
           >
           </a-entity>
       </a-nft>
       <!-- static camera that moves according to the device movemenents -->
-      <a-marker-camera preset="hiro"></a-marker-camera>
+      <a-marker-camera preset="hiro" smooth="true"></a-marker-camera>
     </a-scene>
   </body>
 </html>
