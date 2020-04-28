@@ -37,6 +37,34 @@
       <div>Loading, please wait...</div>
     </div>
 
+    <script>
+// a-scene
+        var scene = document.querySelector("a-scene");
+
+        // a-marker
+        var m = document.querySelector("a-marker-camera");
+
+        // Create object bola
+        function bola(zaxis) {
+            // if bola exist, remove
+            if (document.querySelector("a-sphere")) {
+                let bol = document.querySelector("a-sphere");
+                bol.parentNode.removeChild(bol);
+            }
+            // template literal to create object, z axis for marker = 0, for scene = -5
+            var bola = `<a-sphere position="0 0 ${zaxis}" color="red" radius="0.5"></a-sphere>`;
+            return bola;
+        }
+
+        m.addEventListener("markerFound", (e) => {
+            m.insertAdjacentHTML('beforeend', bola(0));
+        });
+
+        m.addEventListener("markerLost", (e) => {
+            scene.insertAdjacentHTML('beforeend', bola(-5));
+        });
+    </script>
+
     <!-- a-frame scene -->
     <a-scene
       vr-mode-ui="enabled: false;"
@@ -56,8 +84,8 @@
           <!-- as a child of the a-nft entity, you can define the content to show. here's a GLTF model entity -->
           <a-entity
           gltf-model="https://raw.githubusercontent.com/tandylew/Unicornucopia/master/unicorn.gltf"
-              scale="100 100 100"
-              position="-5 0 100"
+              scale="10 10 10"
+              position="0 0 0"
           >
           </a-entity>
       </a-nft>
