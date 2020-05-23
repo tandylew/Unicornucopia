@@ -1,0 +1,77 @@
+<html>
+<script src="node_modules/holoplay/dist/holoplay.js"></script>
+<script type="module">
+
+	import * as THREE from './js/build/three.module.js'
+	import Stats from './js/examples/jsm/libs/stats.module.js'
+
+	import { OrbitControls } from './js/examples/jsm/controls/OrbitControls.js'
+	import { OBJLoader } from './js/examples/jsm/loaders/OBJLoader.js'
+	import { FBXLoader } from './js/examples/jsm/loaders/FBXLoader.js'
+
+//	import * as HoloPlay from './node_modules/holoplay/dist/holoplay.module.js'
+
+var container, stats, controls;
+var camera, scene, renderer, light;
+
+var clock = new THREE.Clock();
+
+var mixer;
+
+init();
+animate();
+
+function init() {
+	
+	container = document.createElement( 'div' );
+	document.body.appendChild( container );
+	
+	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+	camera.position.set( 100, 200, 500);
+
+	scene = new THREE.Scene();
+	
+	light = new THREE.DirectionalLight( 0xffffff )
+	light.position.set( 0, 200, 100 );
+	scene.add( light );
+
+	var loader = new OBJLoader();
+	loader.load( './js/examples/bus.obj', function ( object ) { 
+		object.scale.multiplyScalar(200);  
+		scene.add( object ); });
+	//var loader = new FBXLoader();
+	//loader.load( './laf.fbx', function ( object ) { scene.add( object ); });
+
+	renderer = new THREE.WebGLRenderer( {antialias: true} );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	container.appendChild( renderer.domElement );
+
+	controls = new OrbitControls( camera, renderer.domElement );
+	controls.target.set( 0, 100, 0);
+	controls.update();
+
+	window.addEventListener( 'resize', onWindowResize, false);
+
+	stats = new Stats();
+	container.appendChild( stats.dom );
+}
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+function animate() {
+
+	requestAnimationFrame( animate );
+	var delta = clock.getDelta();
+	if ( mixer ) mixer.update( delta );
+	renderer.render( scene,camera );
+	stats.update();
+}
+</script>
+</html>

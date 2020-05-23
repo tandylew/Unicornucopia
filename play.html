@@ -1,0 +1,81 @@
+<html>
+<script src="js/three.js"></script>
+<script src="node_modules/holoplay/dist/holoplay.js"></script>
+<script type="module">
+
+	import * as THREE from './js/build/three.module.js'
+	import Stats from './js/examples/jsm/libs/stats.module.js'
+
+	import { OrbitControls } from './js/examples/jsm/controls/OrbitControls.js'
+	import { FBXLoader } from './js/examples/jsm/loaders/FBXLoader.js'
+
+//	import * as HoloPlay from './node_modules/holoplay/dist/holoplay.module.js'
+
+var container, stats, controls;
+var holo_camera,camera, scene, holo_renderer, renderer, light;
+
+var clock = new THREE.Clock();
+
+var mixer;
+
+init();
+animate();
+
+function init() {
+	
+	container = document.createElement( 'div' );
+	document.body.appendChild( container );
+	
+	holo_camera = new HoloPlay.Camera();
+	//camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+	//holo_camera.position.set( 100, 200, 300);
+
+	scene = new THREE.Scene();
+	
+	light = new THREE.DirectionalLight( 0xffffff )
+	light.position.set( 0, 200, 100 );
+	scene.add( light );
+
+	var loader = new FBXLoader();
+				loader.load( './laf.fbx', function ( object ) {
+scene.add( object );
+});
+
+	holo_renderer = new HoloPlay.Renderer();
+	document.body.appendChild( holo_renderer.domElement );   
+	//container.appendchild( holo_renderer.domElement );
+	//renderer = new THREE.webglrenderer( {antialias: true} );
+	//renderer.setpixelratio( window.devicepixelratio );
+	//renderer.setsize( window.innerwidth, window.innerheight );
+	//container.appendchild( renderer.domelement );
+
+	controls = new OrbitControls( camera, renderer.domElement );
+	//controls = new OrbitControls( camera, renderer.domElement );
+	controls.target.set( 0, 100, 0);
+	controls.update();
+
+	window.addEventListener( 'resize', onWindowResize, false);
+
+	stats = new Stats();
+	//container.appendChild( stats.dom );
+}
+
+function onWindowResize() {
+	//camera.aspect = window.innerWidth / window.innerHeight;
+	//camera.updateProjectionMatrix();
+	
+	//renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+function animate() {
+
+	requestAnimationFrame( animate );
+	var delta = clock.getDelta();
+	if ( mixer ) mixer.update( delta );
+	renderer.render( scene,camera );
+	//holo_renderer.render( scene, holo_camera );
+	stats.update();
+}
+</script>
+</html>

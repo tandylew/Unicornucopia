@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+	</head>
+
+	<body>
+	<script src="js/three.js"></script>
+	<script type="module">
+import * as HoloPlay from './node_modules/holoplay/dist/holoplay.module.js';
+import { FBXLoader } from './js/examples/jsm/loaders/FBXLoader.js';
+import { OBJLoader } from './js/examples/jsm/loaders/OBJLoader.js';
+var holo_camera, camera, scene, holo_renderer, renderer, light;
+var geometry, material, mesh;
+
+init();
+animate();
+
+function init() {
+
+  holo_camera = new HoloPlay.Camera();
+  //camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10);
+  //camera.position.z = 1;
+
+  scene = new THREE.Scene();
+
+  light = new THREE.DirectionalLight( 0xffffff )
+  light.position.set( 0, 200, 100 );
+  scene.add( light );
+
+  //geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+  //material = new THREE.MeshNormalMaterial();
+
+  //mesh = new THREE.Mesh(geometry, material);
+
+  scene.add(mesh);
+  
+                                //var loader = new FBXLoader();
+                                var loader = new OBJLoader();
+                                //loader.load( './laf.fbx', function ( object ) { scene.add( object );} );
+                                loader.load( './js/examples/bus.obj', function ( object ) { scene.add( object );} );
+
+  holo_renderer = new HoloPlay.Renderer({ antialias: true });
+  //renderer = new THREE.WebGLRenderer({ antialias: true });
+  //renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(holo_renderer.domElement);
+
+}
+
+function animate(time) {
+
+    setTimeout( function() {
+
+        requestAnimationFrame( animate );
+
+    }, 1000 / 300 );
+
+  //object.rotation.x += 0.01;
+  //object.rotation.y += 0.02;
+
+  holo_renderer.render(scene, holo_camera);
+  //renderer.render(scene, camera);
+
+}
+
+		</script>
+	</body>
+</html>
