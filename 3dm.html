@@ -1,0 +1,97 @@
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hello Mesh!</title>
+        <style>
+            body { margin: 0; }
+            canvas { width: 100%; height: 100%; }
+            #container {position: relative;}
+            #container canvas { position: absolute;}
+            #overlay {z-index: 1; width: 100%}
+        </style>
+    </head>
+    <body>
+	<script type="text/javascript" src="https://files.mcneel.com/rhino3dm/js/latest/rhino3dm.js"></script>
+        <script type="module">
+	    import { OrbitControls } from './js/examples/jsm/controls/OrbitControls.js'
+	    import * as THREE from './js/build/three.module.js'
+
+            let fetchPromise = fetch('./hello_mesh.3dm');
+
+            rhino3dm().then(async m => {
+                console.log('Loaded rhino3dm.');
+                let rhino = m;
+
+                let res = await fetchPromise;
+                let buffer = await res.arrayBuffer();
+                let arr = new Uint8Array(buffer);
+                let doc = rhino.File3dm.fromByteArray(arr);
+
+                THREE.Object3D.DefaultUp = new THREE.Vector3(0,0,1)
+                init();
+                let material = new THREE.MeshNormalMaterial();
+	
+                let objects = doc.objects();
+		console.log(objects.count);
+		console.log(objects.get(1).geometry());
+                for (let i = 0; i < objects.count; i++) {
+                    let mesh = objects.get(i).geometry();
+			console.log(mesh);
+                    if(mesh instanceof rhino.Mesh) {
+                        // convert all meshes in 3dm model into threejs objects
+                        let threeMesh = meshToThreejs(mesh, material);
+                        scene.add(threeMesh);
+			console.log(i);
+                    }
+                }
+            });
+
+            // BOILERPLATE //
+            var scene, light, camera, renderer, controls;
+
+            function init(){
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(1,0,1);
+                camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 1, 1000 );
+                camera.position.set(26,-40,5)
+
+        light = new THREE.DirectionalLight( 0x000000 )
+        light.position.set( 26, -40, 15 );
+        scene.add( light );
+
+                renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setPixelRatio( window.devicePixelRatio );
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                //var canvas = document.getElementById("canvas");
+                //canvas.appendChild( renderer.domElement );
+		document.body.appendChild( renderer.domElement );
+
+                controls = new OrbitControls( camera, renderer.domElement  );
+
+                window.addEventListener( 'resize', onWindowResize, false );
+                animate();
+            }
+
+            var animate = function () {
+                requestAnimationFrame( animate );
+                controls.update();
+                renderer.render( scene, camera );
+            };
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                animate();
+            }
+
+            function meshToThreejs(mesh, material) {
+                let loader = new THREE.BufferGeometryLoader();
+                var geometry = loader.parse(mesh.toThreejsJSON());
+                return new THREE.Mesh(geometry, material);
+            }
+        </script>
+    </body>
+</html>
+
