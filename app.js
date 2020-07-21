@@ -14,11 +14,11 @@ function cameraStart() {
         cameraView.srcObject = stream;
     })
     .catch(function(error) {
-        console.error("Oops. Something is broken.", error);
+        console.error("To err is human", error);
     });
 }
 // Take a picture when cameraTrigger is tapped
-cameraTrigger.onclick = function() {
+document.onload = function() {
     cameraSensor.width = cameraView.videoWidth;
     cameraSensor.height = cameraView.videoHeight;
     cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
