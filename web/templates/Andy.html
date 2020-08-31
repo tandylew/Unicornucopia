@@ -1,0 +1,137 @@
+<html>
+<style>
+
+video {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: fill;
+}
+
+.content {
+    top: 10px;
+    position: fixed;
+    height: 98%;
+    width: 98.5%;
+}
+
+canvas {
+    position: relative;
+    top: 0px;
+    z-index: 2;
+}
+
+div {
+    overflow: scrollbar;
+}
+
+img{
+    position: relative;
+    z-index: 1;
+}
+
+</style>
+  <head>
+    <meta charset="utf-8" />
+<div class="container">
+	<img src="{{ url_for('static', filename = 'crop cat.jpg') }}" width="100%" alt="">
+</div>
+<div class="content">
+    <main id="camera">
+        <video id="camera--view" src="{{ url_for('static', filename = 'bear.MP4') }}" autoplay playsinline controls muted height="20%" width="80%"></video>
+    </main>
+</div>
+  </head>
+<script>
+	// Set constraints for the video stream
+	var constraints = { video: { facingMode: "environment" }, audio: false };
+	// Define constants
+	const cameraView = document.querySelector("#camera--view"),
+	    cameraOutput = document.querySelector("#camera--output"),
+	    cameraSensor = document.querySelector("#camera--sensor"),
+	    cameraTrigger = document.querySelector("#camera--trigger")
+	// Access the device camera and stream to cameraView
+	function cameraStart() {
+	    navigator.mediaDevices
+		.getUserMedia(constraints)
+		.then(function(stream) {
+		track = stream.getTracks()[0];
+		cameraView.srcObject = stream;
+	    })
+	    .catch(function(error) {
+		console.error("To err is human", error);
+	    });
+	}
+	// Start the video stream when the window loads
+	// window.addEventListener("load", cameraStart, false);
+</script>
+<script type="module">
+
+	import * as THREE from '{{ url_for('static', filename = 'js/build/three.module.js') }}'
+	import Stats from '{{ url_for('static', filename = 'js/examples/jsm/libs/stats.module.js') }}'
+
+	import { OrbitControls } from '{{ url_for('static', filename = 'js/examples/jsm/controls/OrbitControls.js') }}'
+	import { FBXLoader } from '{{ url_for('static', filename = 'js/examples/jsm/loaders/FBXLoader.js') }}'
+
+var container, stats, controls;
+var camera, scene, renderer, light;
+
+var clock = new THREE.Clock();
+
+var mixer;
+
+init();
+animate();
+
+function init() {
+	
+	container = document.createElement( 'div' );
+	document.body.appendChild( container );
+	
+	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+	camera.position.set( 0, 600, 1200);
+
+	scene = new THREE.Scene();
+	
+	light = new THREE.DirectionalLight( 0xffffff )
+	light.position.set( 0, 200, 100 );
+	scene.add( light );
+
+	var loader = new FBXLoader();
+	loader.load( '{{ url_for('static', filename = 'andyfox.fbx') }}', function ( object ) { scene.add( object ); });
+
+	renderer = new THREE.WebGLRenderer( {antialias: true, alpha: true} );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth , window.innerHeight * .60 );
+	container.appendChild( renderer.domElement );
+
+	controls = new OrbitControls( camera, renderer.domElement );
+	controls.target.set( 0, 0, 0);
+	controls.update();
+
+	window.addEventListener( 'resize', onWindowResize, false);
+
+	//stats = new Stats();
+	//container.appendChild( stats.dom );
+}
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+function animate() {
+
+	requestAnimationFrame( animate );
+	var delta = clock.getDelta();
+	if ( mixer ) mixer.update( delta );
+	renderer.render( scene,camera );
+	//stats.update();
+}
+</script>
+</html>
