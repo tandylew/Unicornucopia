@@ -1,0 +1,3 @@
+gcloud builds submit --tag gcr.io/silken-elevator-225323/web
+gcloud run deploy --image gcr.io/silken-elevator-225323/web --platform managed
+gcloud beta run domain-mappings describe --domain=foxcat.io

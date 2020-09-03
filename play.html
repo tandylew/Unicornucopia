@@ -49,10 +49,10 @@ scene.add( object );
 	//renderer.setsize( window.innerwidth, window.innerheight );
 	//container.appendchild( renderer.domelement );
 
-	controls = new OrbitControls( camera, renderer.domElement );
-	//controls = new OrbitControls( camera, renderer.domElement );
-	controls.target.set( 0, 100, 0);
-	controls.update();
+			controls = new OrbitControls( camera, renderer.domElement );
+			//controls = new OrbitControls( camera, renderer.domElement );
+			controls.target.set( 0, 100, 0);
+			controls.update();
 
 	window.addEventListener( 'resize', onWindowResize, false);
 
