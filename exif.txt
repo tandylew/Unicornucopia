@@ -1,0 +1,48 @@
+Make                            : GoPro
+Camera Model Name               : GoPro Fusion
+Orientation                     : Horizontal (normal)
+Software                        : H19.03.01.50.00
+
+F Number                        : 2.8
+Exposure Program                : Program AE
+ISO                             : 100
+Shutter Speed Value             : 1/960
+Aperture Value                  : 2.8
+Exposure Compensation           : 0
+Max Aperture Value              : 2.8
+Metering Mode                   : Average
+Light Source                    : Unknown
+Flash                           : No flash function
+Focal Length                    : 3.0 mm
+Color Space                     : Unknown (0)
+Exposure Index                  : 0
+File Source                     : Digital Camera
+Scene Type                      : Directly photographed
+Custom Rendered                 : Normal
+Exposure Mode                   : Normal
+White Balance                   : Manual
+Digital Zoom Ratio              : 1
+Focal Length In 35mm Format     : 27 mm
+Scene Capture Type              : Landscape
+Gain Control                    : None
+Contrast                        : Normal
+Saturation                      : Normal
+Sharpness                       : Hard
+
+
+Firmware Version                : H19.03.01.50.00
+GoPro LINF                      : C33632250687311
+Camera Model Name               : GoPro Fusion
+Auto Rotation                   : Up
+Digital Zoom                    : No
+White Balance                   : NATIVE
+Sharpness                       : HIGH
+Color Mode                      : FLAT
+Auto ISO Max                    : 100
+Auto ISO Min                    : 100
+Exposure Compensation           : 0.0
+
+Aperture                        : 2.8
+Shutter Speed                   : 1/960
+
+C:\Users\tandylew\Desktop\buddha>exiftool -a -u -g1 image.JPG

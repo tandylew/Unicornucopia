@@ -1,0 +1,103 @@
+ffmpeg -i crab.mp4 -vf fps=5 crab%d.jpg
+
+
+ffmpeg -i buddha.mp4 -vf fps=10 buddha%d.jpg
+ffmpeg -i boat.mp4 -vf fps=5 boat%d.jpg
+ffmpeg -i duck.mp4 -vf fps=5 duck%d.jpg
+ffmpeg -i IMG_2779.MP4 -vf fps=5 cheekys%d.jpg
+ffmpeg -i 275.MP4 -vf fps=2 South_%4d.jpg
+ffmpeg -i 275.mov -vf fps=5 -t 1 -ss 00:10 South_%4d.jpg
+ffmpeg -i buddha.mp4 -r 1 -t 2 buddha%d.jpg
+
+ffmpeg -i buddha.mp4 -vf fps=1 -t 1 buddha%d.jpg
+
+
+
+ffmpeg -i buddha.mp4 -vf scale=500:-1 -t 10 -r 10 buddha.gif
+
+
+ffmpeg -i buddha.mp4 -i meta.txt -metadata title="my title" -map_metadata 1 -r 1 -t 2 buddha%d.jpg
+ffmpeg -i buddha.mp4 -i meta.txt -map_metadata 1 -r 1 -t 2 buddha%d.jpg
+ffmpeg -i buddha.mp4 -movflags use_metadata_tags -r 1 -t 2 buddha%d.jpg
+ffmpeg -i buddha1.jpg -i change.txt -map_metadata 1 hello.jpg
+ffmpeg -i buddha1.jpg -i meta.txt -map_metadata 1 buddha3.jpg
+ffmpeg -i buddha1.jpg -f ffmetadata buddha.txt out.jpg
+ffmpeg -i buddha1.jpg -f ffmetadata - out.jpg
+ffmpeg -i hello.jpg -f ffmetadata buddha.txt hey.jpg
+
+	
+ffmpeg -i boat.mp4 -vf v360=e:c3x2:cubic:out_forder=lfurdb cube.mp4
+ffplay -i "275 South St.MP4" -vf v360=e:c3x2:cubic:out_forder=lfurdb 
+ffmpeg -i cube.mp4 -vf "crop=in_w*(2/3):in_h:0:0" square.mp4
+ffmpeg -i cube.mp4 -vf v360=c3x2:c1x6 test.mp4
+ffplay -i test.mp4 -vf "crop=in_w/(2/3):0:in_w(1/3):in_h"
+
+ffplay -i square.mp4 -vf "crop=iw/2:ih/2:0:0"
+ffplay square.mp4 -vf "color=color=black@1:size=1024x1024 [over]; [in][over] overlay=x=0:y=1024 [out]"	
+ffplay boat.mp4 -vf 'split[a][b]; [a]pad=iw*2:ih[src]; [b]deshake[filt]; [src][filt]overlay=w'
+
+ffmpeg -i boat.mp4 -map 0:v:0 -c copy -f null -
+
+
+ffplay -i "full boat.mp4" -vf v360=e:c3x2:cubic:out_forder=lfurdb
+
+ffmpeg -i tucker.jpg -vf "delogo=x=50:y=375:w=100:h=100" c.jpg
+ffmpeg -i "full boat.mp4" -t 5 -vf "format=yuv444p,  drawbox=y=ih/PHI:color=black@0.4:width=iw:height=48:t=fill,  drawtext=fontfile=OpenSans-Regular.ttf:text='Title of this Video':fontcolor=white:fontsize=24:x=(w-tw)/2:y=(h/PHI)+th,  format=yuv420p" -c:v libx264 -c:a copy -movflags +faststart output.mp4
+
+ffplay -f lavfi "movie=duck.mp4,scale=iw/2:ih[v0];movie=d.mp4,scale=iw/2:ih[v1];[v0][v1]hstack"
+ffplay -f lavfi "movie=duck.mp4,scale=iw:ih/3[v0];movie=duck render.mp4,setpts=7*PTS,scale=iw:ih/2[v1];[v0][v1]vstack"
+ffplay -f lavfi "movie=duck.mp4,crop=iw/2:ih/2:iw/4:ih/4[v0];movie=duck render.mp4,setpts=3*PTS,crop=iw/2:ih/2:iw/4:ih/4[v1];[v0][v1]hstack"
+ffmpeg -i duck.MP4 -i "duck render.mp4" -an -filter_complex "crop=iw/2:ih:iw/4:0[v0];setpts=4*PTS,crop=iw/2:ih:iw/4:0[v1];[v0][v1]hstack,format=yuv420p" duck_mash.mp4
+ffmpeg -i duck.MP4 -i "duck render.mp4" -framerate 24 -r 24 -an -filter_complex "crop=iw/2:ih:iw/4:0[v0];setpts=4*PTS,crop=iw/2:ih:iw/4:0[v1];[v0][v1]hstack,format=yuv420p" duck_mash.mp4
+
+ffmpeg -re -i <input> -f flv -rtmp_playpath some/long/path -rtmp_app long/app/name rtmp://username:password@myserver/
+
+ffplay -rtmp_playpath stream -listen 1 -i rtmp://192.168.1.21/live
+ffmpeg -f gdigrab -framerate 10 -t 5 -i desktop out.mp4
+
+ffmpeg -r 12 -i %04d.png -s 2160x1080 -filter_complex loop=4:100 -vcodec libx264 -b:v 10M -pix_fmt yuv420p buddha.mp4
+
+ffplay -i "275 South St.MP4" -vf "v360=input=sg:ih_fov=180:iv_fov=180:output=flat:d_fov=120"
+ffplay -i "275 South St.MP4" -vf "v360=input=e:output=flat:h_fov=145:v_fov=90"
+ffplay -i "275 South St.MP4" -vf "v360=input=e:output=flat:d_fov=160:pitch=-10"
+		crop=h=in_h/2:w=in_w/2:x=950:y=750
+ffmpeg -i 275.mov -vf "v360=input=e:output=flat:d_fov=150:pitch=-10" -r 1 -t 1 -ss 00:01 South_%04d.jpg
+
+ffmpeg -i 275.mov -vf "v360=input=e:output=flat:d_fov=150" -r 1 -t 1 -ss 00:15 South_%d.jpg
+ffmpeg -i 275.mov -vf "v360=input=e:output=flat:d_fov=110:w=1700" -r 1 -t 1 -ss 00:01 South_%d.jpg
+ffmpeg -i 275.mov -vf "v360=input=e:output=flat:d_fov=110" -r 2 South_%d.jpg
+
+
+ffmpeg -i 275.MP4 -codec copy -map 0:3 -f rawvideo 275.bin
+
+
+exiftool -FNumber=2.8 -FocalLength=3.0 -Make=GoPro -ApertureValue=2.8 -FocalLengthIn35mmFormat=19mm -ExposureTime=1/60 South_0001.png
+exiftool -FocalLength=3.0 -Make=GoPro -Model=Max -FocalLengthIn35mmFormat=19mm -ExposureTime=1/60 South_0000.jpg
+exiftool -Group=Composite -FocalLength35efl=30mm South_0001.png
+exiftool South_0001.png
+
+exiftool -tagsfromfile 275.JPG -overwrite_original -all:all  null.jpg
+
+exiftool -tagsfromfile door.JPG -overwrite_original -all:all  door\*.jpg
+exiftool -all= South_0001.png 
+
+exiftool -SerialNumber=C3353424578060 -FocalLength=3.0mm -Make=GoPro -Model=Fusion -FocalLengthIn35mmFormat=19mm -ExposureTime=1/60 South_0000.jpg
+exiftool -SerialNumber=C3353424578060 South_0001.png
+exiftool -tagsfromfile South_0000.jpg -overwrite_original -all:all South_0001.png
+for i in `seq 1 110`; do echo "mv $i.jpg" "xmas_"$(printf "%04.f" "$i")".jpg"; done
+
+ffmpeg -y -i "275 Room.JPG" -vf "v360=input=e:output=flat:d_fov=90:pitch=-30" out.jpg
+ffmpeg -y -i "275 Room.JPG" -vf "v360=input=e:output=flat:d_fov=90:pitch=-30:yaw=90" out.jpg
+ffmpeg -y -i "275 Room.JPG" -vf "v360=input=e:output=flat:d_fov=90:pitch=-30" out.jpg
+ffmpeg -y -i "275 Room.JPG" -vf "v360=input=e:output=flat:d_fov=90:pitch=-30" out.jpg
+ffplay -i "275 Room.JPG" -vf "v360=input=e:output=flat"
+
+ffmpeg -y -i "275 Room.JPG" -vf "v360=input=e:output=flat:d_fov=90:pitch=-20:yaw=180:roll=10:rorder=rpy" out.jpg
+ffmpeg -y -i "275 Room.JPG" -vf "v360=input=e:output=flat" out.jpg
+
+exiftool -SerialNumber=C3353424578060 -FocalLength=3.0 -Make=GoPro -Model="GoPro Fusion" chair_0001.jpg
+exiftool -SerialNumber=C3353424578060 -FocalLength=3.0 -Make=GoPro -Model="GoPro Fusion" door_0001.jpg
+exiftool -SerialNumber=C3353424578060 -FocalLength=3.0 -Make=GoPro -Model="GoPro Fusion" window_0001.jpg
+
+exiftool -b -ThumbnailImage hex.jpg > out.jpg
+exiftool "-ThumbnailImage<=L.jpg" hex.jpg
