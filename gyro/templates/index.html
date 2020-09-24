@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <html lang="en-us">
+<style>
+
+video {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    min-width: 10%;
+    min-height: 10%;
+    object-fit: fill;
+}
+
+.content {
+    top: 10px;
+    position: fixed;
+    height: 98%;
+    width: 98.5%;
+}
+
+div {
+    overflow: scrollbar;
+}
+
+img{
+    position: relative;
+    z-index: -1;
+}
+
+</style>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | web</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="shortcut icon" href="../static/TemplateData/favicon.ico">
+    <link rel="stylesheet" href="../static/TemplateData/style.css">
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
@@ -22,8 +50,35 @@
         <div id="unity-build-title">web</div>
       </div>
     </div>
-    <script>
-      var buildUrl = "Build";
+	<div class="content">
+    <main id="camera">
+        <video playsinline muted id="camera--view" autoplay height="20%" width="80%"></video>
+    </main>
+</div>
+	<script>
+	// Set constraints for the video stream
+	var constraints = { video: { facingMode: "environment" }, audio: false };
+	// Define constants
+	const cameraView = document.querySelector("#camera--view"),
+	    cameraOutput = document.querySelector("#camera--output"),
+	    cameraSensor = document.querySelector("#camera--sensor"),
+	    cameraTrigger = document.querySelector("#camera--trigger")
+	// Access the device camera and stream to cameraView
+	function cameraStart() {
+	    navigator.mediaDevices
+		.getUserMedia(constraints)
+		.then(function(stream) {
+		track = stream.getTracks()[0];
+		cameraView.srcObject = stream;
+	    })
+	    .catch(function(error) {
+		console.error("To err is human", error);
+	    });
+	}
+	// Start the video stream when the window loads
+	window.addEventListener("load", cameraStart, false);
+
+      var buildUrl = "../static/Build";
       var loaderUrl = buildUrl + "/web.loader.js";
       var config = {
         dataUrl: buildUrl + "/web.data",

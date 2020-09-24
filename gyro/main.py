@@ -10,15 +10,7 @@ app = Flask(__name__)
 def web():
     #name = os.environ.get('NAME', 'foXCat')
     #return 'Hello {}!'.format(name)
-	return render_template('Andy.html')
-	
-@app.route('/Andy')
-def andy():	
-	return render_template('Andy.html')
-	
-@app.route('/andy')
-def andy_lower():	
-	return render_template('Andy.html')
+	return render_template('index.html')
 	
 @app.route('/index')
 def index():	
@@ -26,4 +18,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    app.run(debug=True, host='0.0.0.0', ssl_context='adhoc', port=int(os.environ.get('PORT', 8080)))
